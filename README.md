@@ -189,16 +189,7 @@ spark-submit \
 
 ---
 
-## 🔧 Tecnologie Utilizzate
 
-| Tecnologia | Job | Motivazione |
-|---|---|---|
-| PySpark DataFrame API | Cleaning | API ad alto livello ottimale per ETL |
-| Spark SQL | Job 3.1 / 3.3 | Query dichiarative, ottimizzatore Catalyst |
-| Spark Core (RDD) | Job 3.2 | Controllo esplicito su Map/Reduce e shuffle |
-| Hive (HQL) | Job 3.1 | Window functions SQL-native, integrazione HDFS |
-
----
 
 ## 📈 Risultati (Prime 10 righe)
 
