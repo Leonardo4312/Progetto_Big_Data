@@ -1,0 +1,188 @@
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Connecting to jdbc:hive2://localhost:10000
+Connected to: Apache Hive (version 2.3.2)
+Driver: Hive JDBC (version 2.3.2)
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+Beeline version 2.3.2 by Apache Hive
+0: jdbc:hive2://localhost:10000> -- ============================================ ================
+0: jdbc:hive2://localhost:10000> -- JOB 3.3 ??? Ranking Anomalie (HiveQL Univers ale)
+0: jdbc:hive2://localhost:10000> -- ============================================ ================
+0: jdbc:hive2://localhost:10000> -- Uso via Beeline:
+0: jdbc:hive2://localhost:10000> --   beeline -u jdbc:hive2://localhost:10000 -n  hive \
+0: jdbc:hive2://localhost:10000> --       --hivevar BASE_PATH=hdfs://namenode:90 00 \
+0: jdbc:hive2://localhost:10000> --       --hivevar SUBSET=pct_050 \
+0: jdbc:hive2://localhost:10000> --       --hivevar INPUT_DIR=/data/subsets/pct_ 050 \
+0: jdbc:hive2://localhost:10000> --       < jobs/03_job33_hive.hql
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> SET mapreduce.map.memory.mb=2048;
+No rows affected (0.044 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.map.java.opts=-Xmx1638m;
+No rows affected (0.005 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.reduce.memory.mb=2048;
+No rows affected (0.004 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.reduce.java.opts=-Xmx1638m;
+No rows affected (0.004 seconds)
+0: jdbc:hive2://localhost:10000> SET hive.exec.reducers.bytes.per.reducer=134217 728;
+No rows affected (0.005 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> CREATE DATABASE IF NOT EXISTS airline_db;
+No rows affected (0.13 seconds)
+0: jdbc:hive2://localhost:10000> USE airline_db;
+No rows affected (0.051 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 1. Tabella sorgente ?????????????? ???????????????????????????????????????????????????????????????????????????????? ????????????????????????????????????????????????????????
+0: jdbc:hive2://localhost:10000> DROP TABLE IF EXISTS flights_raw33_${hivevar:SU BSET};
+No rows affected (0.046 seconds)
+0: jdbc:hive2://localhost:10000> CREATE EXTERNAL TABLE flights_raw33_${hivevar:S UBSET} (
+. . . . . . . . . . . . . . . .>     OP_UNIQUE_CARRIER   STRING,
+. . . . . . . . . . . . . . . .>     ORIGIN              STRING,
+. . . . . . . . . . . . . . . .>     DEP_DELAY           DOUBLE,
+. . . . . . . . . . . . . . . .>     ARR_DELAY           DOUBLE,
+. . . . . . . . . . . . . . . .>     CANCELLED           DOUBLE
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> PARTITIONED BY (YEAR INT, MONTH INT)
+. . . . . . . . . . . . . . . .> STORED AS PARQUET
+. . . . . . . . . . . . . . . .> LOCATION '${hivevar:BASE_PATH}${hivevar:INPUT_D IR}';
+No rows affected (0.103 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 2. Aggiunta partizioni YEAR+MONTH  ???????????????????????????????????????????????????????????????????????????????? ????????????????????????????
+0: jdbc:hive2://localhost:10000> ALTER TABLE flights_raw33_${hivevar:SUBSET} ADD  IF NOT EXISTS
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=1)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=1'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=2)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=2'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=3)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=3'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=4)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=4'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=5)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=5'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=6)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=6'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=7)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=7'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=8)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=8'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=9)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=9'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=10) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=10'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=11) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=11'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=12) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=12';
+No rows affected (0.301 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- Verifica record
+0: jdbc:hive2://localhost:10000> SELECT COUNT(*) AS totale_record FROM flights_r aw33_${hivevar:SUBSET};
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
++----------------+
+| totale_record  |
++----------------+
+| 1771698        |
++----------------+
+1 row selected (1.789 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 3. Tabella risultato ????????????? ???????????????????????????????????????????????????????????????????????????????? ??????????????????????????????????????????????????????
+0: jdbc:hive2://localhost:10000> DROP TABLE IF EXISTS job33_ranking_${hivevar:SU BSET};
+No rows affected (0.029 seconds)
+0: jdbc:hive2://localhost:10000> CREATE EXTERNAL TABLE job33_ranking_${hivevar:S UBSET} (
+. . . . . . . . . . . . . . . .>     airport                 STRING,
+. . . . . . . . . . . . . . . .>     airline                 STRING,
+. . . . . . . . . . . . . . . .>     flight_count            BIGINT,
+. . . . . . . . . . . . . . . .>     avg_dep_delay           DOUBLE,
+. . . . . . . . . . . . . . . .>     avg_arr_delay           DOUBLE,
+. . . . . . . . . . . . . . . .>     cancellation_rate_pct   DOUBLE,
+. . . . . . . . . . . . . . . .>     airport_avg_dep_delay   DOUBLE,
+. . . . . . . . . . . . . . . .>     airport_total_flights   BIGINT,
+. . . . . . . . . . . . . . . .>     dep_delay_diff          DOUBLE,
+. . . . . . . . . . . . . . . .>     rank_in_airport         INT,
+. . . . . . . . . . . . . . . .>     anomaly_label           STRING
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> STORED AS PARQUET
+. . . . . . . . . . . . . . . .> LOCATION '${hivevar:BASE_PATH}/data/outputs/job 33/hive_${hivevar:SUBSET}';
+No rows affected (0.085 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 4. Query principale ?????????????? ???????????????????????????????????????????????????????????????????????????????? ????????????????????????????????????????????????????????
+0: jdbc:hive2://localhost:10000> WITH airline_airport_stats AS (
+. . . . . . . . . . . . . . . .>     SELECT
+. . . . . . . . . . . . . . . .>         ORIGIN                                                               AS airport,
+. . . . . . . . . . . . . . . .>         OP_UNIQUE_CARRIER                                                    AS airline,
+. . . . . . . . . . . . . . . .>         COUNT(*)                                                             AS flight_count,
+. . . . . . . . . . . . . . . .>         ROUND(AVG(CASE WHEN CANCELLED = 0 THEN  DEP_DELAY ELSE NULL END), 2) AS avg_dep_delay,
+. . . . . . . . . . . . . . . .>         ROUND(AVG(CASE WHEN CANCELLED = 0 THEN  ARR_DELAY ELSE NULL END), 2) AS avg_arr_delay,
+. . . . . . . . . . . . . . . .>         ROUND(SUM(CANCELLED) / COUNT(*) * 100.0 , 2)                         AS cancellation_rate_pct
+. . . . . . . . . . . . . . . .>     FROM flights_raw33_${hivevar:SUBSET}
+. . . . . . . . . . . . . . . .>     WHERE ORIGIN IS NOT NULL AND TRIM(ORIGIN) ! = ''
+. . . . . . . . . . . . . . . .>       AND OP_UNIQUE_CARRIER IS NOT NULL AND TRI M(OP_UNIQUE_CARRIER) != ''
+. . . . . . . . . . . . . . . .>     GROUP BY ORIGIN, OP_UNIQUE_CARRIER
+. . . . . . . . . . . . . . . .> ),
+. . . . . . . . . . . . . . . .> airport_global_avg AS (
+. . . . . . . . . . . . . . . .>     SELECT
+. . . . . . . . . . . . . . . .>         ORIGIN                                                               AS airport,
+. . . . . . . . . . . . . . . .>         ROUND(AVG(CASE WHEN CANCELLED = 0 THEN  DEP_DELAY ELSE NULL END), 2) AS airport_avg_dep_delay,
+. . . . . . . . . . . . . . . .>         COUNT(*)                                                             AS airport_total_flights
+. . . . . . . . . . . . . . . .>     FROM flights_raw33_${hivevar:SUBSET}
+. . . . . . . . . . . . . . . .>     WHERE ORIGIN IS NOT NULL AND TRIM(ORIGIN) ! = ''
+. . . . . . . . . . . . . . . .>     GROUP BY ORIGIN
+. . . . . . . . . . . . . . . .> ),
+. . . . . . . . . . . . . . . .> ranked AS (
+. . . . . . . . . . . . . . . .>     SELECT
+. . . . . . . . . . . . . . . .>         s.airport,
+. . . . . . . . . . . . . . . .>         s.airline,
+. . . . . . . . . . . . . . . .>         s.flight_count,
+. . . . . . . . . . . . . . . .>         s.avg_dep_delay,
+. . . . . . . . . . . . . . . .>         s.avg_arr_delay,
+. . . . . . . . . . . . . . . .>         s.cancellation_rate_pct,
+. . . . . . . . . . . . . . . .>         a.airport_avg_dep_delay,
+. . . . . . . . . . . . . . . .>         a.airport_total_flights,
+. . . . . . . . . . . . . . . .>         ROUND(s.avg_dep_delay - a.airport_avg_d ep_delay, 2)                AS dep_delay_diff,
+. . . . . . . . . . . . . . . .>         RANK() OVER (
+. . . . . . . . . . . . . . . .>             PARTITION BY s.airport
+. . . . . . . . . . . . . . . .>             ORDER BY s.avg_dep_delay ASC
+. . . . . . . . . . . . . . . .>         )                                                                   AS rank_in_airport
+. . . . . . . . . . . . . . . .>     FROM airline_airport_stats s
+. . . . . . . . . . . . . . . .>     JOIN airport_global_avg a ON s.airport = a. airport
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> INSERT OVERWRITE TABLE job33_ranking_${hivevar: SUBSET}
+. . . . . . . . . . . . . . . .> SELECT
+. . . . . . . . . . . . . . . .>     airport,
+. . . . . . . . . . . . . . . .>     airline,
+. . . . . . . . . . . . . . . .>     flight_count,
+. . . . . . . . . . . . . . . .>     COALESCE(avg_dep_delay, 0.0)         AS avg _dep_delay,
+. . . . . . . . . . . . . . . .>     COALESCE(avg_arr_delay, 0.0)         AS avg _arr_delay,
+. . . . . . . . . . . . . . . .>     cancellation_rate_pct,
+. . . . . . . . . . . . . . . .>     COALESCE(airport_avg_dep_delay, 0.0) AS air port_avg_dep_delay,
+. . . . . . . . . . . . . . . .>     airport_total_flights,
+. . . . . . . . . . . . . . . .>     COALESCE(dep_delay_diff, 0.0)        AS dep _delay_diff,
+. . . . . . . . . . . . . . . .>     rank_in_airport,
+. . . . . . . . . . . . . . . .>     CASE
+. . . . . . . . . . . . . . . .>         WHEN dep_delay_diff >  15.0 THEN 'ANOMA LO_PEGGIORE'
+. . . . . . . . . . . . . . . .>         WHEN dep_delay_diff < -15.0 THEN 'ANOMA LO_MIGLIORE'
+. . . . . . . . . . . . . . . .>         ELSE                             'NELLA _NORMA'
+. . . . . . . . . . . . . . . .>     END AS anomaly_label
+. . . . . . . . . . . . . . . .> FROM ranked
+. . . . . . . . . . . . . . . .> ORDER BY airport ASC, rank_in_airport ASC;
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Execution log at: /tmp/root/root_20260529163850_5f3abb26-6ab5-4536-a7f8-8642cc7580ee.log
+2026-05-29 16:38:59	Starting to launch local task to process map join;	maximum memory = 477626368
+2026-05-29 16:38:59	Dump the side-table for tag: 1 with group count: 348 into file: file:/tmp/root/be521ac5-ffbb-4bee-a4b4-6026f939261b/hive_2026-05-29_16-38-50_833_6075641409598671620-12/-local-10006/HashTable-Stage-7/MapJoin-mapfile21--.hashtable
+2026-05-29 16:38:59	Uploaded 1 File to: file:/tmp/root/be521ac5-ffbb-4bee-a4b4-6026f939261b/hive_2026-05-29_16-38-50_833_6075641409598671620-12/-local-10006/HashTable-Stage-7/MapJoin-mapfile21--.hashtable (11648 bytes)
+2026-05-29 16:38:59	End of local task; Time Taken: 0.159 sec.
+No rows affected (13.012 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 5. Stampa prime 10 righe richieste  ??????????????????????????????????????????????????????????????????????????????? ??????????????????????????
+0: jdbc:hive2://localhost:10000> SELECT * FROM job33_ranking_${hivevar:SUBSET} L IMIT 10;
++--------------------------------+--------------------------------+-------------------------------------+--------------------------------------+--------------------------------------+----------------------------------------------+----------------------------------------------+----------------------------------------------+---------------------------------------+----------------------------------------+--------------------------------------+
+| job33_ranking_pct_025.airport  | job33_ranking_pct_025.airline  | job33_ranking_pct_025.flight_count  | job33_ranking_pct_025.avg_dep_delay  | job33_ranking_pct_025.avg_arr_delay  | job33_ranking_pct_025.cancellation_rate_pct  | job33_ranking_pct_025.airport_avg_dep_delay  | job33_ranking_pct_025.airport_total_flights  | job33_ranking_pct_025.dep_delay_diff  | job33_ranking_pct_025.rank_in_airport  | job33_ranking_pct_025.anomaly_label  |
++--------------------------------+--------------------------------+-------------------------------------+--------------------------------------+--------------------------------------+----------------------------------------------+----------------------------------------------+----------------------------------------------+---------------------------------------+----------------------------------------+--------------------------------------+
+| ABE                            | 9E                             | 243                                 | 5.0                                  | -3.4                                 | 0.0                                          | 13.38                                        | 1032                                         | -8.38                                 | 1                                      | NELLA_NORMA                          |
+| ABE                            | G4                             | 429                                 | 8.45                                 | 1.03                                 | 2.33                                         | 13.38                                        | 1032                                         | -4.93                                 | 2                                      | NELLA_NORMA                          |
+| ABE                            | OH                             | 292                                 | 20.9                                 | 9.31                                 | 0.68                                         | 13.38                                        | 1032                                         | 7.52                                  | 3                                      | NELLA_NORMA                          |
+| ABE                            | OO                             | 68                                  | 42.83                                | 35.82                                | 4.41                                         | 13.38                                        | 1032                                         | 29.45                                 | 4                                      | ANOMALO_PEGGIORE                     |
+| ABI                            | MQ                             | 417                                 | 6.17                                 | 2.64                                 | 0.96                                         | 6.17                                         | 417                                          | 0.0                                   | 1                                      | NELLA_NORMA                          |
+| ABQ                            | DL                             | 358                                 | -1.14                                | -9.05                                | 1.4                                          | 9.65                                         | 6048                                         | -10.79                                | 1                                      | NELLA_NORMA                          |
+| ABQ                            | OO                             | 1010                                | 2.42                                 | -1.44                                | 0.2                                          | 9.65                                         | 6048                                         | -7.23                                 | 2                                      | NELLA_NORMA                          |
+| ABQ                            | UA                             | 439                                 | 5.76                                 | -0.2                                 | 0.68                                         | 9.65                                         | 6048                                         | -3.89                                 | 3                                      | NELLA_NORMA                          |
+| ABQ                            | MQ                             | 218                                 | 9.24                                 | 6.8                                  | 0.0                                          | 9.65                                         | 6048                                         | -0.41                                 | 4                                      | NELLA_NORMA                          |
+| ABQ                            | AS                             | 123                                 | 9.55                                 | 6.45                                 | 1.63                                         | 9.65                                         | 6048                                         | -0.1                                  | 5                                      | NELLA_NORMA                          |
++--------------------------------+--------------------------------+-------------------------------------+--------------------------------------+--------------------------------------+----------------------------------------------+----------------------------------------------+----------------------------------------------+---------------------------------------+----------------------------------------+--------------------------------------+
+10 rows selected (0.494 seconds)
+0: jdbc:hive2://localhost:10000> Closing: 0: jdbc:hive2://localhost:10000

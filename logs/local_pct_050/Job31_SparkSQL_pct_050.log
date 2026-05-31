@@ -1,0 +1,72 @@
+26/05/29 16:41:50 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+26/05/29 16:41:50 INFO SparkContext: Running Spark version 3.1.1
+26/05/29 16:41:50 INFO ResourceUtils: ==============================================================
+26/05/29 16:41:50 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/05/29 16:41:50 INFO ResourceUtils: ==============================================================
+26/05/29 16:41:50 INFO SparkContext: Submitted application: Job31-AirlineStatistics-SparkSQL-pct_050
+26/05/29 16:41:50 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/05/29 16:41:50 INFO ResourceProfile: Limiting resource is cpu
+26/05/29 16:41:50 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/05/29 16:41:50 INFO SecurityManager: Changing view acls to: root
+26/05/29 16:41:50 INFO SecurityManager: Changing modify acls to: root
+26/05/29 16:41:50 INFO SecurityManager: Changing view acls groups to: 
+26/05/29 16:41:50 INFO SecurityManager: Changing modify acls groups to: 
+26/05/29 16:41:50 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(root); groups with view permissions: Set(); users  with modify permissions: Set(root); groups with modify permissions: Set()
+26/05/29 16:41:51 INFO Utils: Successfully started service 'sparkDriver' on port 36707.
+26/05/29 16:41:51 INFO SparkEnv: Registering MapOutputTracker
+26/05/29 16:41:51 INFO SparkEnv: Registering BlockManagerMaster
+26/05/29 16:41:51 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/05/29 16:41:51 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/05/29 16:41:51 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/05/29 16:41:51 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-99bd78f0-b4ae-4f0d-a960-987a89bf5604
+26/05/29 16:41:51 INFO MemoryStore: MemoryStore started with capacity 366.3 MiB
+26/05/29 16:41:51 INFO SparkEnv: Registering OutputCommitCoordinator
+26/05/29 16:41:51 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/05/29 16:41:51 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://475910694bd2:4040
+26/05/29 16:41:51 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+26/05/29 16:41:51 INFO TransportClientFactory: Successfully created connection to spark-master/172.20.0.2:7077 after 25 ms (0 ms spent in bootstraps)
+26/05/29 16:41:51 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20260529164151-0010
+26/05/29 16:41:51 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260529164151-0010/0 on worker-20260529162150-172.20.0.4-44961 (172.20.0.4:44961) with 2 core(s)
+26/05/29 16:41:51 INFO StandaloneSchedulerBackend: Granted executor ID app-20260529164151-0010/0 on hostPort 172.20.0.4:44961 with 2 core(s), 1024.0 MiB RAM
+26/05/29 16:41:51 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260529164151-0010/1 on worker-20260529162150-172.20.0.5-33965 (172.20.0.5:33965) with 2 core(s)
+26/05/29 16:41:51 INFO StandaloneSchedulerBackend: Granted executor ID app-20260529164151-0010/1 on hostPort 172.20.0.5:33965 with 2 core(s), 1024.0 MiB RAM
+26/05/29 16:41:51 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 45267.
+26/05/29 16:41:51 INFO NettyBlockTransferService: Server created on 475910694bd2:45267
+26/05/29 16:41:51 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+26/05/29 16:41:51 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 475910694bd2, 45267, None)
+26/05/29 16:41:51 INFO BlockManagerMasterEndpoint: Registering block manager 475910694bd2:45267 with 366.3 MiB RAM, BlockManagerId(driver, 475910694bd2, 45267, None)
+26/05/29 16:41:51 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 475910694bd2, 45267, None)
+26/05/29 16:41:51 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 475910694bd2, 45267, None)
+26/05/29 16:41:51 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260529164151-0010/0 is now RUNNING
+26/05/29 16:41:51 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260529164151-0010/1 is now RUNNING
+26/05/29 16:41:52 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+26/05/29 16:41:52 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir ('file:/spark-warehouse').
+26/05/29 16:41:52 INFO SharedState: Warehouse path is 'file:/spark-warehouse'.
+============================================================
+JOB 3.1 — Statistiche Compagnie Aeree (Spark SQL)
+         Subset: pct_050  |  Input: hdfs://namenode:9000/data/subsets/pct_050
+============================================================
+Record caricati correttamente: 3,539,522 [subset=pct_050]
+
+Prime 10 righe del risultato:
++-------+-------+-------------+-------------+-------------+-------------+---------------------+---------------------------------------+
+|airline|airport|total_flights|min_arr_delay|max_arr_delay|avg_arr_delay|cancellation_rate_pct|active_months                          |
++-------+-------+-------------+-------------+-------------+-------------+---------------------+---------------------------------------+
+|9E     |ABE    |526          |-47.0        |476.0        |-1.33        |0.95                 |[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]|
+|9E     |ABY    |16           |-31.0        |321.0        |20.5         |0.0                  |[2, 11, 12]                            |
+|9E     |AEX    |438          |-34.0        |979.0        |11.96        |1.14                 |[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]|
+|9E     |AGS    |775          |-30.0        |534.0        |5.34         |2.19                 |[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]|
+|9E     |ALB    |543          |-44.0        |289.0        |-4.29        |1.84                 |[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]|
+|9E     |ATL    |13593        |-41.0        |1207.0       |2.29         |1.13                 |[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]|
+|9E     |ATW    |87           |-34.0        |420.0        |8.23         |0.0                  |[1, 4, 5, 6, 7, 8, 10]                 |
+|9E     |AUS    |195          |-35.0        |1225.0       |18.27        |1.03                 |[1, 2, 3, 4, 5, 6, 7]                  |
+|9E     |AVL    |327          |-39.0        |835.0        |2.83         |1.22                 |[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]|
+|9E     |AZO    |6            |-11.0        |71.0         |9.83         |0.0                  |[1]                                    |
++-------+-------+-------------+-------------+-------------+-------------+---------------------+---------------------------------------+
+only showing top 10 rows
+
+Salvataggio JSON in: hdfs://namenode:9000/data/outputs/job31/pct_050/json
+Salvataggio CSV in: hdfs://namenode:9000/data/outputs/job31/pct_050/csv
+
+✅ Job 3.1 completato in 40.8s

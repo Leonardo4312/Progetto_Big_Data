@@ -1,0 +1,101 @@
+26/05/30 08:12:23 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+26/05/30 08:12:23 INFO SparkContext: Running Spark version 3.1.1
+26/05/30 08:12:23 INFO ResourceUtils: ==============================================================
+26/05/30 08:12:23 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/05/30 08:12:23 INFO ResourceUtils: ==============================================================
+26/05/30 08:12:23 INFO SparkContext: Submitted application: Job33-AnomalyRanking-SparkCore-pct_200
+26/05/30 08:12:23 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/05/30 08:12:24 INFO ResourceProfile: Limiting resource is cpu
+26/05/30 08:12:24 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/05/30 08:12:24 INFO SecurityManager: Changing view acls to: root
+26/05/30 08:12:24 INFO SecurityManager: Changing modify acls to: root
+26/05/30 08:12:24 INFO SecurityManager: Changing view acls groups to: 
+26/05/30 08:12:24 INFO SecurityManager: Changing modify acls groups to: 
+26/05/30 08:12:24 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(root); groups with view permissions: Set(); users  with modify permissions: Set(root); groups with modify permissions: Set()
+26/05/30 08:12:24 INFO Utils: Successfully started service 'sparkDriver' on port 44995.
+26/05/30 08:12:24 INFO SparkEnv: Registering MapOutputTracker
+26/05/30 08:12:24 INFO SparkEnv: Registering BlockManagerMaster
+26/05/30 08:12:24 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/05/30 08:12:24 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/05/30 08:12:24 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/05/30 08:12:24 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-2f7f302c-f50d-4fd2-a948-1c89aba08a76
+26/05/30 08:12:24 INFO MemoryStore: MemoryStore started with capacity 366.3 MiB
+26/05/30 08:12:24 INFO SparkEnv: Registering OutputCommitCoordinator
+26/05/30 08:12:24 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/05/30 08:12:24 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://549b6d7b819c:4040
+26/05/30 08:12:24 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+26/05/30 08:12:24 INFO TransportClientFactory: Successfully created connection to spark-master/172.19.0.2:7077 after 28 ms (0 ms spent in bootstraps)
+26/05/30 08:12:25 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20260530081225-0006
+26/05/30 08:12:25 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260530081225-0006/0 on worker-20260530075339-172.19.0.4-40503 (172.19.0.4:40503) with 2 core(s)
+26/05/30 08:12:25 INFO StandaloneSchedulerBackend: Granted executor ID app-20260530081225-0006/0 on hostPort 172.19.0.4:40503 with 2 core(s), 1024.0 MiB RAM
+26/05/30 08:12:25 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260530081225-0006/1 on worker-20260530075339-172.19.0.3-46339 (172.19.0.3:46339) with 2 core(s)
+26/05/30 08:12:25 INFO StandaloneSchedulerBackend: Granted executor ID app-20260530081225-0006/1 on hostPort 172.19.0.3:46339 with 2 core(s), 1024.0 MiB RAM
+26/05/30 08:12:25 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 46083.
+26/05/30 08:12:25 INFO NettyBlockTransferService: Server created on 549b6d7b819c:46083
+26/05/30 08:12:25 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+26/05/30 08:12:25 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 549b6d7b819c, 46083, None)
+26/05/30 08:12:25 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260530081225-0006/0 is now RUNNING
+26/05/30 08:12:25 INFO BlockManagerMasterEndpoint: Registering block manager 549b6d7b819c:46083 with 366.3 MiB RAM, BlockManagerId(driver, 549b6d7b819c, 46083, None)
+26/05/30 08:12:25 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260530081225-0006/1 is now RUNNING
+26/05/30 08:12:25 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 549b6d7b819c, 46083, None)
+26/05/30 08:12:25 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 549b6d7b819c, 46083, None)
+26/05/30 08:12:25 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+26/05/30 08:12:26 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir ('file:/spark-warehouse').
+26/05/30 08:12:26 INFO SharedState: Warehouse path is 'file:/spark-warehouse'.
+============================================================
+JOB 3.3 — Ranking Anomalie (Spark Core RDD)
+         Subset: pct_200  |  Input: hdfs://namenode:9000/data/subsets/pct_200
+============================================================
+Record caricati: 14,157,268 [subset=pct_200]
+
+Prime 10 righe del risultato:
++-------+-------+------------+-------------+-------------+---------------------+---------------------+---------------------+--------------+---------------+----------------+
+|airport|airline|flight_count|avg_dep_delay|avg_arr_delay|cancellation_rate_pct|airport_avg_dep_delay|airport_total_flights|dep_delay_diff|rank_in_airport|anomaly_label   |
++-------+-------+------------+-------------+-------------+---------------------+---------------------+---------------------+--------------+---------------+----------------+
+|ABE    |G4     |3678        |8.43         |0.64         |1.63                 |11.81                |8672                 |-3.38         |1              |NELLA_NORMA     |
+|ABE    |9E     |2034        |9.42         |0.67         |1.38                 |11.81                |8672                 |-2.39         |2              |NELLA_NORMA     |
+|ABE    |OH     |2330        |14.25        |3.12         |1.29                 |11.81                |8672                 |2.44          |3              |NELLA_NORMA     |
+|ABE    |OO     |630         |30.63        |22.01        |3.81                 |11.81                |8672                 |18.82         |4              |ANOMALO_PEGGIORE|
+|ABI    |MQ     |3514        |7.26         |4.41         |0.85                 |7.26                 |3514                 |0.0           |1              |NELLA_NORMA     |
+|ABQ    |DL     |3094        |1.75         |-5.59        |0.9                  |9.13                 |48176                |-7.38         |1              |NELLA_NORMA     |
+|ABQ    |OO     |7974        |2.1          |-2.05        |0.45                 |9.13                 |48176                |-7.03         |2              |NELLA_NORMA     |
+|ABQ    |MQ     |1814        |5.28         |3.25         |0.66                 |9.13                 |48176                |-3.85         |3              |NELLA_NORMA     |
+|ABQ    |UA     |3644        |5.48         |-0.32        |1.04                 |9.13                 |48176                |-3.65         |4              |NELLA_NORMA     |
+|ABQ    |AS     |846         |8.42         |4.52         |0.95                 |9.13                 |48176                |-0.71         |5              |NELLA_NORMA     |
++-------+-------+------------+-------------+-------------+---------------------+---------------------+---------------------+--------------+---------------+----------------+
+only showing top 10 rows
+
+
+Distribuzione label anomalie:
++----------------+-----+
+|   anomaly_label|count|
++----------------+-----+
+|     NELLA_NORMA| 1617|
+|ANOMALO_PEGGIORE|  104|
+|ANOMALO_MIGLIORE|   17|
++----------------+-----+
+
+
+Top 10 compagnie più anomale (peggiori):
++-------+-------+-------------+--------------+---------------+
+|airline|airport|avg_dep_delay|dep_delay_diff|rank_in_airport|
++-------+-------+-------------+--------------+---------------+
+|OH     |MOB    |135.13       |126.02        |5              |
+|9E     |DFW    |99.5         |80.63         |12             |
+|AA     |RDM    |90.9         |75.54         |5              |
+|B6     |HDN    |78.9         |64.27         |7              |
+|9E     |TPA    |77.62        |63.37         |11             |
+|G4     |SAT    |74.5         |63.06         |12             |
+|NK     |LFT    |73.0         |57.73         |5              |
+|G4     |RNO    |67.33        |57.06         |10             |
+|MQ     |LAS    |66.96        |54.15         |12             |
+|OO     |SRQ    |64.2         |51.56         |11             |
++-------+-------+-------------+--------------+---------------+
+only showing top 10 rows
+
+Salvataggio JSON → hdfs://namenode:9000/data/outputs/job33/pct_200/json
+Salvataggio CSV  → hdfs://namenode:9000/data/outputs/job33/pct_200/csv
+
+✅ Job 3.3 completato in 112.1s  [subset=pct_200, records=14,157,268]
+   Output: hdfs://namenode:9000/data/outputs/job33/pct_200

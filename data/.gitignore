@@ -1,0 +1,5 @@
+﻿# Non tracciare il dataset CSV (troppo grande per GitHub)
+*.csv
+!timings.csv
+*.zip
+*.gz

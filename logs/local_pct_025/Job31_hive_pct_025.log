@@ -1,0 +1,125 @@
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Connecting to jdbc:hive2://localhost:10000
+Connected to: Apache Hive (version 2.3.2)
+Driver: Hive JDBC (version 2.3.2)
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+Beeline version 2.3.2 by Apache Hive
+0: jdbc:hive2://localhost:10000> -- ============================================ ================
+0: jdbc:hive2://localhost:10000> -- JOB 3.1 ??? Statistiche Compagnie Aeree (Hiv eQL Universale)
+0: jdbc:hive2://localhost:10000> -- ============================================ ================
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- Aumento della memoria per i task MapReduce l ocali per evitare l'errore "return code 2"
+0: jdbc:hive2://localhost:10000> SET mapreduce.map.memory.mb=2048;
+No rows affected (0.033 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.map.java.opts=-Xmx1638m;
+No rows affected (0.006 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.reduce.memory.mb=2048;
+No rows affected (0.007 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.reduce.java.opts=-Xmx1638m;
+No rows affected (0.005 seconds)
+0: jdbc:hive2://localhost:10000> SET hive.exec.reducers.bytes.per.reducer=134217 728;
+No rows affected (0.003 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> CREATE DATABASE IF NOT EXISTS airline_db;
+No rows affected (0.048 seconds)
+0: jdbc:hive2://localhost:10000> USE airline_db;
+No rows affected (0.061 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 1. Tabella sorgente con doppia par tizione (Punta a HDFS o S3) ??????????????????
+0: jdbc:hive2://localhost:10000> DROP TABLE IF EXISTS flights_raw_${hivevar:SUBS ET};
+No rows affected (0.181 seconds)
+0: jdbc:hive2://localhost:10000> CREATE EXTERNAL TABLE flights_raw_${hivevar:SUB SET} (
+. . . . . . . . . . . . . . . .>     OP_UNIQUE_CARRIER   STRING,
+. . . . . . . . . . . . . . . .>     ORIGIN              STRING,
+. . . . . . . . . . . . . . . .>     ARR_DELAY           DOUBLE,
+. . . . . . . . . . . . . . . .>     CANCELLED           DOUBLE
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> PARTITIONED BY (YEAR INT, MONTH INT)
+. . . . . . . . . . . . . . . .> STORED AS PARQUET
+. . . . . . . . . . . . . . . .> LOCATION '${hivevar:BASE_PATH}${hivevar:INPUT_D IR}';
+No rows affected (0.083 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 2. Gestione delle partizioni YEAR+ MONTH ????????????????????????????????????????????????
+0: jdbc:hive2://localhost:10000> ALTER TABLE flights_raw_${hivevar:SUBSET} ADD I F NOT EXISTS 
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=1)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=1'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=2)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=2'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=3)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=3'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=4)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=4'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=5)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=5'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=6)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=6'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=7)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=7'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=8)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=8'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=9)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=9'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=10) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=10'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=11) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=11'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=12) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=12';
+No rows affected (0.277 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- Verifica del caricamento record per i log di  Beeline
+0: jdbc:hive2://localhost:10000> SELECT COUNT(*) AS totale_record FROM flights_r aw_${hivevar:SUBSET};
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
++----------------+
+| totale_record  |
++----------------+
+| 1771698        |
++----------------+
+1 row selected (1.883 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 3. Tabella risultato (Esterna, per  salvare i dati su HDFS o S3 stabilmente) ?????????
+0: jdbc:hive2://localhost:10000> DROP TABLE IF EXISTS airline_stats_${hivevar:SU BSET};
+No rows affected (0.08 seconds)
+0: jdbc:hive2://localhost:10000> CREATE EXTERNAL TABLE airline_stats_${hivevar:S UBSET} (
+. . . . . . . . . . . . . . . .>     airline                 STRING,
+. . . . . . . . . . . . . . . .>     airport                 STRING,
+. . . . . . . . . . . . . . . .>     total_flights           BIGINT,
+. . . . . . . . . . . . . . . .>     min_arr_delay           DOUBLE,
+. . . . . . . . . . . . . . . .>     max_arr_delay           DOUBLE,
+. . . . . . . . . . . . . . . .>     avg_arr_delay           DOUBLE,
+. . . . . . . . . . . . . . . .>     cancellation_rate_pct   DOUBLE,
+. . . . . . . . . . . . . . . .>     active_months           ARRAY<INT>
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> STORED AS PARQUET
+. . . . . . . . . . . . . . . .> LOCATION '${hivevar:BASE_PATH}/data/outputs/job 31/hive_${hivevar:SUBSET}';
+No rows affected (0.055 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 4. Query principale di aggregazion e distribuita ?????????????????????????????????????????????????????????????????? 
+0: jdbc:hive2://localhost:10000> INSERT OVERWRITE TABLE airline_stats_${hivevar: SUBSET}
+. . . . . . . . . . . . . . . .> SELECT
+. . . . . . . . . . . . . . . .>     OP_UNIQUE_CARRIER                                AS airline,
+. . . . . . . . . . . . . . . .>     ORIGIN                                           AS airport,
+. . . . . . . . . . . . . . . .>     COUNT(*)                                         AS total_flights,
+. . . . . . . . . . . . . . . .>     MIN(ARR_DELAY)                                   AS min_arr_delay,
+. . . . . . . . . . . . . . . .>     MAX(ARR_DELAY)                                   AS max_arr_delay,
+. . . . . . . . . . . . . . . .>     ROUND(AVG(ARR_DELAY), 2)                         AS avg_arr_delay,
+. . . . . . . . . . . . . . . .>     ROUND(SUM(CANCELLED) / COUNT(*) * 100, 2)        AS cancellation_rate_pct,
+. . . . . . . . . . . . . . . .>     sort_array(collect_set(MONTH))                   AS active_months
+. . . . . . . . . . . . . . . .> FROM flights_raw_${hivevar:SUBSET}
+. . . . . . . . . . . . . . . .> GROUP BY OP_UNIQUE_CARRIER, ORIGIN
+. . . . . . . . . . . . . . . .> ORDER BY airline, airport;
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+No rows affected (4.107 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 5. Stampa delle prime 10 righe ric hieste dal report finalizzato ??????????????????
+0: jdbc:hive2://localhost:10000> SELECT * FROM airline_stats_${hivevar:SUBSET} L IMIT 10;
++--------------------------------+--------------------------------+--------------------------------------+--------------------------------------+--------------------------------------+--------------------------------------+----------------------------------------------+--------------------------------------+
+| airline_stats_pct_025.airline  | airline_stats_pct_025.airport  | airline_stats_pct_025.total_flights  | airline_stats_pct_025.min_arr_delay  | airline_stats_pct_025.max_arr_delay  | airline_stats_pct_025.avg_arr_delay  | airline_stats_pct_025.cancellation_rate_pct  | airline_stats_pct_025.active_months  |
++--------------------------------+--------------------------------+--------------------------------------+--------------------------------------+--------------------------------------+--------------------------------------+----------------------------------------------+--------------------------------------+
+| 9E                             | ABE                            | 243                                  | -44.0                                | 386.0                                | -3.4                                 | 0.0                                          | [1,2,3,4,5,6,7,8,9,10,11,12]         |
+| 9E                             | ABY                            | 7                                    | -24.0                                | 321.0                                | 57.29                                | 0.0                                          | [2,11,12]                            |
+| 9E                             | AEX                            | 218                                  | -31.0                                | 872.0                                | 15.5                                 | 0.92                                         | [1,2,3,4,5,6,7,8,9,10,11,12]         |
+| 9E                             | AGS                            | 395                                  | -30.0                                | 526.0                                | 3.77                                 | 2.28                                         | [1,2,3,4,5,6,7,8,9,10,11,12]         |
+| 9E                             | ALB                            | 290                                  | -51.0                                | 247.0                                | -6.72                                | 2.76                                         | [1,2,3,4,5,6,7,8,9,10,11,12]         |
+| 9E                             | ATL                            | 6866                                 | -43.0                                | 1207.0                               | 2.37                                 | 1.31                                         | [1,2,3,4,5,6,7,8,9,10,11,12]         |
+| 9E                             | ATW                            | 39                                   | -33.0                                | 328.0                                | 5.72                                 | 0.0                                          | [1,4,5,6,7,10]                       |
+| 9E                             | AUS                            | 99                                   | -28.0                                | 1069.0                               | 18.63                                | 1.01                                         | [1,2,3,4,5,6,7]                      |
+| 9E                             | AVL                            | 156                                  | -38.0                                | 463.0                                | 5.29                                 | 1.92                                         | [1,2,3,4,5,6,7,8,9,10,11,12]         |
+| 9E                             | AZO                            | 4                                    | -10.0                                | 71.0                                 | 18.25                                | 0.0                                          | [1]                                  |
++--------------------------------+--------------------------------+--------------------------------------+--------------------------------------+--------------------------------------+--------------------------------------+----------------------------------------------+--------------------------------------+
+10 rows selected (0.431 seconds)
+0: jdbc:hive2://localhost:10000> Closing: 0: jdbc:hive2://localhost:10000

@@ -1,0 +1,245 @@
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Connecting to jdbc:hive2://localhost:10000
+Connected to: Apache Hive (version 2.3.2)
+Driver: Hive JDBC (version 2.3.2)
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+Beeline version 2.3.2 by Apache Hive
+0: jdbc:hive2://localhost:10000> -- ============================================ ================
+0: jdbc:hive2://localhost:10000> -- JOB 3.2 ??? Report Ritardi e Cause per Aerop orto (HiveQL Universale)
+0: jdbc:hive2://localhost:10000> -- ============================================ ================
+0: jdbc:hive2://localhost:10000> -- Uso via Beeline:
+0: jdbc:hive2://localhost:10000> --   beeline -u jdbc:hive2://localhost:10000 -n  hive \
+0: jdbc:hive2://localhost:10000> --       --hivevar BASE_PATH=hdfs://namenode:90 00 \
+0: jdbc:hive2://localhost:10000> --       --hivevar SUBSET=pct_050 \
+0: jdbc:hive2://localhost:10000> --       --hivevar INPUT_DIR=/data/subsets/pct_ 050 \
+0: jdbc:hive2://localhost:10000> --       < jobs/02_job32_hive.hql
+0: jdbc:hive2://localhost:10000> -- Per AWS EMR, sostituire BASE_PATH con s3://t uo-bucket
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- Aumento della memoria per i task MapReduce l ocali per evitare l'errore "return code 2"
+0: jdbc:hive2://localhost:10000> SET mapreduce.map.memory.mb=2048;
+No rows affected (0.035 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.map.java.opts=-Xmx1638m;
+No rows affected (0.007 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.reduce.memory.mb=2048;
+No rows affected (0.007 seconds)
+0: jdbc:hive2://localhost:10000> SET mapreduce.reduce.java.opts=-Xmx1638m;
+No rows affected (0.004 seconds)
+0: jdbc:hive2://localhost:10000> SET hive.exec.reducers.bytes.per.reducer=134217 728;
+No rows affected (0.003 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> CREATE DATABASE IF NOT EXISTS airline_db;
+No rows affected (0.061 seconds)
+0: jdbc:hive2://localhost:10000> USE airline_db;
+No rows affected (0.023 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 1. Tabella sorgente (Punta a HDFS  o S3) ?????????????????????????????????????????????????????????????????????????? ????????????????
+0: jdbc:hive2://localhost:10000> DROP TABLE IF EXISTS flights_raw32_${hivevar:SU BSET};
+No rows affected (0.055 seconds)
+0: jdbc:hive2://localhost:10000> CREATE EXTERNAL TABLE flights_raw32_${hivevar:S UBSET} (
+. . . . . . . . . . . . . . . .>     ORIGIN              STRING,
+. . . . . . . . . . . . . . . .>     DEP_DELAY           DOUBLE,
+. . . . . . . . . . . . . . . .>     ARR_DELAY           DOUBLE,
+. . . . . . . . . . . . . . . .>     CANCELLED           DOUBLE,
+. . . . . . . . . . . . . . . .>     CANCELLATION_CODE   STRING,
+. . . . . . . . . . . . . . . .>     CARRIER_DELAY       DOUBLE,
+. . . . . . . . . . . . . . . .>     WEATHER_DELAY       DOUBLE,
+. . . . . . . . . . . . . . . .>     NAS_DELAY           DOUBLE,
+. . . . . . . . . . . . . . . .>     SECURITY_DELAY      DOUBLE,
+. . . . . . . . . . . . . . . .>     LATE_AIRCRAFT_DELAY DOUBLE
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> PARTITIONED BY (YEAR INT, MONTH INT)
+. . . . . . . . . . . . . . . .> STORED AS PARQUET
+. . . . . . . . . . . . . . . .> LOCATION '${hivevar:BASE_PATH}${hivevar:INPUT_D IR}';
+No rows affected (0.108 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 2. Aggiunta partizioni YEAR+MONTH  ???????????????????????????????????????????????????????????????????????????????? ????????????????????????????
+0: jdbc:hive2://localhost:10000> ALTER TABLE flights_raw32_${hivevar:SUBSET} ADD  IF NOT EXISTS
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=1)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=1'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=2)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=2'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=3)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=3'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=4)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=4'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=5)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=5'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=6)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=6'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=7)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=7'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=8)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=8'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=9)  LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=9'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=10) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=10'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=11) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=11'
+. . . . . . . . . . . . . . . .>   PARTITION (YEAR=2024, MONTH=12) LOCATION '${h ivevar:BASE_PATH}${hivevar:INPUT_DIR}/YEAR=2024/MONTH=12';
+No rows affected (0.311 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- Verifica caricamento record
+0: jdbc:hive2://localhost:10000> SELECT COUNT(*) AS totale_record FROM flights_r aw32_${hivevar:SUBSET};
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
++----------------+
+| totale_record  |
++----------------+
+| 7078634        |
++----------------+
+1 row selected (4.808 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 3. Tabella risultato (Esterna, sal va su HDFS o S3 stabilmente) ??????????????????
+0: jdbc:hive2://localhost:10000> DROP TABLE IF EXISTS delay_report_${hivevar:SUB SET};
+No rows affected (0.057 seconds)
+0: jdbc:hive2://localhost:10000> CREATE EXTERNAL TABLE delay_report_${hivevar:SU BSET} (
+. . . . . . . . . . . . . . . .>     airport         STRING,
+. . . . . . . . . . . . . . . .>     month           INT,
+. . . . . . . . . . . . . . . .>     avg_arr_delay   DOUBLE,
+. . . . . . . . . . . . . . . .>     avg_dep_delay   DOUBLE,
+. . . . . . . . . . . . . . . .>     delay_band      STRING,
+. . . . . . . . . . . . . . . .>     flight_count    BIGINT,
+. . . . . . . . . . . . . . . .>     top3_causes     STRING
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> STORED AS PARQUET
+. . . . . . . . . . . . . . . .> LOCATION '${hivevar:BASE_PATH}/data/outputs/job 32/hive_${hivevar:SUBSET}';
+No rows affected (0.174 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 4. Query principale ?????????????? ???????????????????????????????????????????????????????????????????????????????? ?????????????????????????????????????????????????????
+0: jdbc:hive2://localhost:10000> -- La query calcola:
+0: jdbc:hive2://localhost:10000> --   A) Statistiche per fascia di ritardo (bass o/medio/alto) per (aeroporto, mese)
+0: jdbc:hive2://localhost:10000> --   B) Top 3 cause di ritardo/cancellazione pe r (aeroporto, mese)
+0: jdbc:hive2://localhost:10000> --   C) Join tra A e B con formato delle cause  come stringa
+0: jdbc:hive2://localhost:10000> WITH stats AS (
+. . . . . . . . . . . . . . . .>     SELECT
+. . . . . . . . . . . . . . . .>         ORIGIN                                                     AS airport,
+. . . . . . . . . . . . . . . .>         COALESCE(MONTH, 0)                                         AS month,
+. . . . . . . . . . . . . . . .>         CASE
+. . . . . . . . . . . . . . . .>             WHEN DEP_DELAY < 15 OR DEP_DELAY IS  NULL THEN 'basso'
+. . . . . . . . . . . . . . . .>             WHEN DEP_DELAY <= 60                       THEN 'medio'
+. . . . . . . . . . . . . . . .>             ELSE                                            'alto'
+. . . . . . . . . . . . . . . .>         END                                                        AS delay_band,
+. . . . . . . . . . . . . . . .>         COUNT(*)                                                   AS flight_count,
+. . . . . . . . . . . . . . . .>         ROUND(AVG(COALESCE(DEP_DELAY, 0.0)), 2)                   AS avg_dep_delay,
+. . . . . . . . . . . . . . . .>         ROUND(AVG(COALESCE(ARR_DELAY, 0.0)), 2)                   AS avg_arr_delay
+. . . . . . . . . . . . . . . .>     FROM flights_raw32_${hivevar:SUBSET}
+. . . . . . . . . . . . . . . .>     GROUP BY
+. . . . . . . . . . . . . . . .>         ORIGIN,
+. . . . . . . . . . . . . . . .>         COALESCE(MONTH, 0),
+. . . . . . . . . . . . . . . .>         CASE
+. . . . . . . . . . . . . . . .>             WHEN DEP_DELAY < 15 OR DEP_DELAY IS  NULL THEN 'basso'
+. . . . . . . . . . . . . . . .>             WHEN DEP_DELAY <= 60                       THEN 'medio'
+. . . . . . . . . . . . . . . .>             ELSE                                            'alto'
+. . . . . . . . . . . . . . . .>         END
+. . . . . . . . . . . . . . . .> ),
+. . . . . . . . . . . . . . . .> causes_agg AS (
+. . . . . . . . . . . . . . . .>     SELECT
+. . . . . . . . . . . . . . . .>         ORIGIN                                                                                                           AS airp ort,
+. . . . . . . . . . . . . . . .>         COALESCE(MONTH, 0)                                                                                               AS mont h,
+. . . . . . . . . . . . . . . .>         SUM(CASE WHEN CANCELLED = 1 AND CANCELL ATION_CODE = 'A' THEN 1.0 ELSE 0.0 END)
+. . . . . . . . . . . . . . . .>             + SUM(COALESCE(CARRIER_DELAY, 0.0))       AS carrier_val,
+. . . . . . . . . . . . . . . .>         SUM(CASE WHEN CANCELLED = 1 AND CANCELL ATION_CODE = 'B' THEN 1.0 ELSE 0.0 END)
+. . . . . . . . . . . . . . . .>             + SUM(COALESCE(WEATHER_DELAY, 0.0))       AS weather_val,
+. . . . . . . . . . . . . . . .>         SUM(CASE WHEN CANCELLED = 1 AND CANCELL ATION_CODE = 'C' THEN 1.0 ELSE 0.0 END)
+. . . . . . . . . . . . . . . .>             + SUM(COALESCE(NAS_DELAY, 0.0))           AS nas_val,
+. . . . . . . . . . . . . . . .>         SUM(CASE WHEN CANCELLED = 1 AND CANCELL ATION_CODE = 'D' THEN 1.0 ELSE 0.0 END)
+. . . . . . . . . . . . . . . .>             + SUM(COALESCE(SECURITY_DELAY, 0.0) )     AS security_val,
+. . . . . . . . . . . . . . . .>         SUM(COALESCE(LATE_AIRCRAFT_DELAY, 0.0))       AS late_aircraft_val
+. . . . . . . . . . . . . . . .>     FROM flights_raw32_${hivevar:SUBSET}
+. . . . . . . . . . . . . . . .>     GROUP BY ORIGIN, COALESCE(MONTH, 0)
+. . . . . . . . . . . . . . . .> ),
+. . . . . . . . . . . . . . . .> causes_ranked AS (
+. . . . . . . . . . . . . . . .>     -- Costruiamo array di (valore, nome) e pre ndiamo il TOP 3 con una tecnica pivot
+. . . . . . . . . . . . . . . .>     -- Selezioniamo top3 ordinando manualmente  le 5 cause con CASE/GREATEST
+. . . . . . . . . . . . . . . .>     SELECT
+. . . . . . . . . . . . . . . .>         airport,
+. . . . . . . . . . . . . . . .>         month,
+. . . . . . . . . . . . . . . .>         carrier_val,
+. . . . . . . . . . . . . . . .>         weather_val,
+. . . . . . . . . . . . . . . .>         nas_val,
+. . . . . . . . . . . . . . . .>         security_val,
+. . . . . . . . . . . . . . . .>         late_aircraft_val,
+. . . . . . . . . . . . . . . .>         -- Rank delle 5 cause per valore decres cente
+. . . . . . . . . . . . . . . .>         RANK() OVER (PARTITION BY airport, mont h ORDER BY carrier_val     DESC) AS rank_carrier,
+. . . . . . . . . . . . . . . .>         RANK() OVER (PARTITION BY airport, mont h ORDER BY weather_val     DESC) AS rank_weather,
+. . . . . . . . . . . . . . . .>         RANK() OVER (PARTITION BY airport, mont h ORDER BY nas_val         DESC) AS rank_nas,
+. . . . . . . . . . . . . . . .>         RANK() OVER (PARTITION BY airport, mont h ORDER BY security_val    DESC) AS rank_security,
+. . . . . . . . . . . . . . . .>         RANK() OVER (PARTITION BY airport, mont h ORDER BY late_aircraft_val DESC) AS rank_late
+. . . . . . . . . . . . . . . .>     FROM causes_agg
+. . . . . . . . . . . . . . . .> ),
+. . . . . . . . . . . . . . . .> -- Costruiamo le stringhe delle top 3 cause com e lista Python per compatibilit?? con output Spark Core
+. . . . . . . . . . . . . . . .> causes_formatted AS (
+. . . . . . . . . . . . . . . .>     SELECT
+. . . . . . . . . . . . . . . .>         airport,
+. . . . . . . . . . . . . . . .>         month,
+. . . . . . . . . . . . . . . .>         -- Elemento 1 (massimo assoluto)
+. . . . . . . . . . . . . . . .>         CASE
+. . . . . . . . . . . . . . . .>             WHEN rank_carrier = 1 AND carrier_v al > 0         THEN CONCAT("('Carrier', ", CAST(carrier_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_weather = 1 AND weather_v al > 0         THEN CONCAT("('Weather', ", CAST(weather_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_nas = 1 AND nas_val > 0                  THEN CONCAT("('NAS', ", CAST(nas_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_security = 1 AND security _val > 0       THEN CONCAT("('Security', ", CAST(security_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_late = 1 AND late_aircraf t_val > 0      THEN CONCAT("('Late Aircraft', ", CAST(late_aircraft_val AS STRIN G), ')')
+. . . . . . . . . . . . . . . .>             ELSE NULL
+. . . . . . . . . . . . . . . .>         END AS cause1,
+. . . . . . . . . . . . . . . .>         -- Elemento 2 (secondo massimo)
+. . . . . . . . . . . . . . . .>         CASE
+. . . . . . . . . . . . . . . .>             WHEN rank_carrier = 2 AND carrier_v al > 0         THEN CONCAT("('Carrier', ", CAST(carrier_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_weather = 2 AND weather_v al > 0         THEN CONCAT("('Weather', ", CAST(weather_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_nas = 2 AND nas_val > 0                  THEN CONCAT("('NAS', ", CAST(nas_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_security = 2 AND security _val > 0       THEN CONCAT("('Security', ", CAST(security_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_late = 2 AND late_aircraf t_val > 0      THEN CONCAT("('Late Aircraft', ", CAST(late_aircraft_val AS STRIN G), ')')
+. . . . . . . . . . . . . . . .>             ELSE NULL
+. . . . . . . . . . . . . . . .>         END AS cause2,
+. . . . . . . . . . . . . . . .>         -- Elemento 3 (terzo massimo)
+. . . . . . . . . . . . . . . .>         CASE
+. . . . . . . . . . . . . . . .>             WHEN rank_carrier = 3 AND carrier_v al > 0         THEN CONCAT("('Carrier', ", CAST(carrier_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_weather = 3 AND weather_v al > 0         THEN CONCAT("('Weather', ", CAST(weather_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_nas = 3 AND nas_val > 0                  THEN CONCAT("('NAS', ", CAST(nas_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_security = 3 AND security _val > 0       THEN CONCAT("('Security', ", CAST(security_val AS STRING), ')')
+. . . . . . . . . . . . . . . .>             WHEN rank_late = 3 AND late_aircraf t_val > 0      THEN CONCAT("('Late Aircraft', ", CAST(late_aircraft_val AS STRIN G), ')')
+. . . . . . . . . . . . . . . .>             ELSE NULL
+. . . . . . . . . . . . . . . .>         END AS cause3
+. . . . . . . . . . . . . . . .>     FROM causes_ranked
+. . . . . . . . . . . . . . . .> )
+. . . . . . . . . . . . . . . .> INSERT OVERWRITE TABLE delay_report_${hivevar:S UBSET}
+. . . . . . . . . . . . . . . .> SELECT
+. . . . . . . . . . . . . . . .>     s.airport,
+. . . . . . . . . . . . . . . .>     s.month,
+. . . . . . . . . . . . . . . .>     s.avg_arr_delay,
+. . . . . . . . . . . . . . . .>     s.avg_dep_delay,
+. . . . . . . . . . . . . . . .>     s.delay_band,
+. . . . . . . . . . . . . . . .>     s.flight_count,
+. . . . . . . . . . . . . . . .>     CONCAT('[',
+. . . . . . . . . . . . . . . .>         COALESCE(c.cause1, ''),
+. . . . . . . . . . . . . . . .>         CASE WHEN c.cause1 IS NOT NULL AND c.ca use2 IS NOT NULL THEN ', ' ELSE '' END,
+. . . . . . . . . . . . . . . .>         COALESCE(c.cause2, ''),
+. . . . . . . . . . . . . . . .>         CASE WHEN c.cause2 IS NOT NULL AND c.ca use3 IS NOT NULL THEN ', ' ELSE '' END,
+. . . . . . . . . . . . . . . .>         COALESCE(c.cause3, ''),
+. . . . . . . . . . . . . . . .>     ']')                                                           AS top3_causes
+. . . . . . . . . . . . . . . .> FROM stats s
+. . . . . . . . . . . . . . . .> LEFT JOIN causes_formatted c ON s.airport = c.a irport AND s.month = c.month
+. . . . . . . . . . . . . . . .> ORDER BY s.airport, s.month, s.delay_band;
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop-2.7.4/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Execution log at: /tmp/root/root_20260529190337_612c982e-7a61-4873-94ce-92f317e6e955.log
+2026-05-29 19:04:01	Starting to launch local task to process map join;	maximum memory = 477626368
+2026-05-29 19:04:02	Dump the side-table for tag: 1 with group count: 4039 into file: file:/tmp/root/509dc327-d904-4d40-bcdc-b95475ccae39/hive_2026-05-29_19-03-37_942_6927842902276764174-13/-local-10010/HashTable-Stage-11/MapJoin-mapfile01--.hashtable
+2026-05-29 19:04:02	Uploaded 1 File to: file:/tmp/root/509dc327-d904-4d40-bcdc-b95475ccae39/hive_2026-05-29_19-03-37_942_6927842902276764174-13/-local-10010/HashTable-Stage-11/MapJoin-mapfile01--.hashtable (172736 bytes)
+2026-05-29 19:04:02	End of local task; Time Taken: 0.205 sec.
+No rows affected (26.98 seconds)
+0: jdbc:hive2://localhost:10000> 
+0: jdbc:hive2://localhost:10000> -- ????????? 5. Stampa prime 10 righe richieste  dal report ???????????????????????????????????????????????????????????????????? ?
+0: jdbc:hive2://localhost:10000> SELECT * FROM delay_report_${hivevar:SUBSET} LI MIT 10;
++-------------------------------+-----------------------------+-------------------------------------+-------------------------------------+----------------------------------+------------------------------------+-----------------------------------+
+| delay_report_pct_100.airport  | delay_report_pct_100.month  | delay_report_pct_100.avg_arr_delay  | delay_report_pct_100.avg_dep_delay  | delay_report_pct_100.delay_band  | delay_report_pct_100.flight_count  | delay_report_pct_100.top3_causes  |
++-------------------------------+-----------------------------+-------------------------------------+-------------------------------------+----------------------------------+------------------------------------+-----------------------------------+
+| ABE                           | 1                           | 234.03                              | 241.3                               | alto                             | 30                                 | [('Carrier', 3134.0)]             |
+| ABE                           | 1                           | -13.9                               | -5.3                                | basso                            | 288                                | [('Carrier', 3134.0)]             |
+| ABE                           | 1                           | 31.45                               | 34.32                               | medio                            | 31                                 | [('Carrier', 3134.0)]             |
+| ABE                           | 2                           | 217.93                              | 227.93                              | alto                             | 14                                 | [('Carrier', 1762.0)]             |
+| ABE                           | 2                           | -19.31                              | -6.58                               | basso                            | 300                                | [('Carrier', 1762.0)]             |
+| ABE                           | 2                           | 9.6                                 | 29.7                                | medio                            | 20                                 | [('Carrier', 1762.0)]             |
+| ABE                           | 3                           | 163.39                              | 173.43                              | alto                             | 23                                 | [('Carrier', 1588.0)]             |
+| ABE                           | 3                           | -18.26                              | -6.15                               | basso                            | 341                                | [('Carrier', 1588.0)]             |
+| ABE                           | 3                           | 19.89                               | 30.68                               | medio                            | 28                                 | [('Carrier', 1588.0)]             |
+| ABE                           | 4                           | 250.38                              | 258.66                              | alto                             | 29                                 | [('Carrier', 4242.0)]             |
++-------------------------------+-----------------------------+-------------------------------------+-------------------------------------+----------------------------------+------------------------------------+-----------------------------------+
+10 rows selected (0.504 seconds)
+0: jdbc:hive2://localhost:10000> Closing: 0: jdbc:hive2://localhost:10000

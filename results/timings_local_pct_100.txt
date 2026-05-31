@@ -1,0 +1,11 @@
+job,technology,subset,environment,elapsed_seconds
+cleaning,PySpark,full,local,53.9
+job31,SparkSQL,pct_100,local,48.0
+job31,SparkCore,pct_100,local,48.8
+job31,hive,pct_100,local,15.4
+job32,SparkCore,pct_100,local,89.3
+job32,SparkSQL,pct_100,local,68.0
+job32,hive,pct_100,local,36.1
+job33,SparkCore,pct_100,local,73.8
+job33,SparkSQL,pct_100,local,56.9
+job33,hive,pct_100,local,30.1

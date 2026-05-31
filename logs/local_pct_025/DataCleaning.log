@@ -1,0 +1,72 @@
+26/05/29 16:32:22 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+26/05/29 16:32:22 INFO SparkContext: Running Spark version 3.1.1
+26/05/29 16:32:22 INFO ResourceUtils: ==============================================================
+26/05/29 16:32:22 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/05/29 16:32:22 INFO ResourceUtils: ==============================================================
+26/05/29 16:32:22 INFO SparkContext: Submitted application: FlightData2024-Cleaning
+26/05/29 16:32:22 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/05/29 16:32:22 INFO ResourceProfile: Limiting resource is cpu
+26/05/29 16:32:22 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/05/29 16:32:22 INFO SecurityManager: Changing view acls to: root
+26/05/29 16:32:22 INFO SecurityManager: Changing modify acls to: root
+26/05/29 16:32:22 INFO SecurityManager: Changing view acls groups to: 
+26/05/29 16:32:22 INFO SecurityManager: Changing modify acls groups to: 
+26/05/29 16:32:22 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(root); groups with view permissions: Set(); users  with modify permissions: Set(root); groups with modify permissions: Set()
+26/05/29 16:32:22 INFO Utils: Successfully started service 'sparkDriver' on port 40867.
+26/05/29 16:32:23 INFO SparkEnv: Registering MapOutputTracker
+26/05/29 16:32:23 INFO SparkEnv: Registering BlockManagerMaster
+26/05/29 16:32:23 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/05/29 16:32:23 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/05/29 16:32:23 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/05/29 16:32:23 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-7e1c968a-2ca8-4d65-bf19-d30cec23dc75
+26/05/29 16:32:23 INFO MemoryStore: MemoryStore started with capacity 366.3 MiB
+26/05/29 16:32:23 INFO SparkEnv: Registering OutputCommitCoordinator
+26/05/29 16:32:23 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/05/29 16:32:23 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://475910694bd2:4040
+26/05/29 16:32:23 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+26/05/29 16:32:23 INFO TransportClientFactory: Successfully created connection to spark-master/172.20.0.2:7077 after 19 ms (0 ms spent in bootstraps)
+26/05/29 16:32:23 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20260529163223-0001
+26/05/29 16:32:23 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260529163223-0001/0 on worker-20260529162150-172.20.0.4-44961 (172.20.0.4:44961) with 2 core(s)
+26/05/29 16:32:23 INFO StandaloneSchedulerBackend: Granted executor ID app-20260529163223-0001/0 on hostPort 172.20.0.4:44961 with 2 core(s), 1024.0 MiB RAM
+26/05/29 16:32:23 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260529163223-0001/1 on worker-20260529162150-172.20.0.5-33965 (172.20.0.5:33965) with 2 core(s)
+26/05/29 16:32:23 INFO StandaloneSchedulerBackend: Granted executor ID app-20260529163223-0001/1 on hostPort 172.20.0.5:33965 with 2 core(s), 1024.0 MiB RAM
+26/05/29 16:32:23 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 42555.
+26/05/29 16:32:23 INFO NettyBlockTransferService: Server created on 475910694bd2:42555
+26/05/29 16:32:23 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+26/05/29 16:32:23 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 475910694bd2, 42555, None)
+26/05/29 16:32:23 INFO BlockManagerMasterEndpoint: Registering block manager 475910694bd2:42555 with 366.3 MiB RAM, BlockManagerId(driver, 475910694bd2, 42555, None)
+26/05/29 16:32:23 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 475910694bd2, 42555, None)
+26/05/29 16:32:23 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 475910694bd2, 42555, None)
+26/05/29 16:32:23 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260529163223-0001/1 is now RUNNING
+26/05/29 16:32:23 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260529163223-0001/0 is now RUNNING
+26/05/29 16:32:24 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+26/05/29 16:32:24 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir ('file:/spark-warehouse').
+26/05/29 16:32:24 INFO SharedState: Warehouse path is 'file:/spark-warehouse'.
+============================================================
+JOB: Data Cleaning — Flight Delay Dataset 2024
+============================================================
+
+[1/7] Lettura CSV...
+     Sorgente: HDFS (hdfs://namenode:9000/user/bigdata/flight2024/raw/flights_2024.csv)
+     Record totali grezzi: 7,079,081
+
+[2/7] Selezione colonne rilevanti...
+
+[3/7] Cast dei tipi numerici...
+
+[4/7] Rimozione record con chiavi mancanti (ORIGIN, OP_CARRIER)...
+     Record rimasti: 7,079,081  (rimossi: 0)
+
+[5/7] Filtraggio valori anomali sui ritardi...
+     Record rimasti: 7,078,634  (rimossi: 447)
+
+[6/7] Aggiunta colonne derivate...
+
+[7/7] Scrittura output Parquet partizionato per YEAR, MONTH...
+
+============================================================
+✅ Cleaning completato in 48.5s
+   Record finali puliti: 7,078,634
+   Output: hdfs://namenode:9000/data/cleaned
+============================================================
